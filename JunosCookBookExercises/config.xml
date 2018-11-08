@@ -1,0 +1,44 @@
+      <configuration>
+              <interfaces>
+                  <interface>
+                      <name>{{ifd}}</name>
+                      <unit>
+                          <name>{{unit}}</name>
+                          <vlan-id>{{vlan}}</vlan-id>
+                          <family>
+                              <inet>
+                                  <address>
+                                      <name>{{p2p_pe}}/30</name>
+                                  </address>
+                              </inet>
+                          </family>
+                      </unit>
+                 </interface>
+              </interfaces>
+              <routing-instances>
+                  <instance>
+                      <name>VRF-{{vrf}}</name>
+                      <instance-type>vrf</instance-type>
+                      <interface>
+                          <name>{{ifd}}.{{vlan}}</name>
+                      </interface>
+                      <route-distinguisher>
+                          <rd-type>8928:{{vrf}}</rd-type>
+                      </route-distinguisher>
+                      <vrf-target>
+                          <community>target:8928:{{vrf}}</community>
+                      </vrf-target>
+                      <routing-options>
+                          <static>
+                            {% for route in cst %}
+                              <route>
+                                  <name>{{route}}</name>
+                                  <next-hop>{{p2p_ce}}</next-hop>
+                              </route>
+                              {% endfor %}
+                          </static>
+                      </routing-options>
+
+                  </instance>
+              </routing-instances>
+      </configuration>
